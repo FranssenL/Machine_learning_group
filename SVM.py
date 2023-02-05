@@ -29,6 +29,7 @@ def read_data_svm(path):  #reads the data the same way as CNN but without reshap
             
     return(data)
 
+### GENERATE THE TARGET DATA ###
 def gen_labels(size):
     labels = [0]*size
     for i in range(len(labels)):
@@ -36,6 +37,8 @@ def gen_labels(size):
             labels[i] = labels[i] - (math.floor(i/2000)*10)
     return labels
 
+
+### CONFUSION MATRIX ###
 def plot_confusion(y_test, y_pred):
     # Compute and print the confusion matrix
     cm = metrics.confusion_matrix(y_test, y_pred)
@@ -54,7 +57,6 @@ def plot_confusion(y_test, y_pred):
     
 
 def main():
-#     os.chdir(os.path.dirname(sys.argv[0]))
     y_pred = None
     y_test = None    
 
@@ -66,14 +68,16 @@ def main():
     y_train = np.array(y_train)
     y_test = np.array(y_test)
     
-    c = 5
+    #Set the optimal parameters for the SVM
+    c = 5                       
     gamma = 9.0
     kernel = 'poly'
     print("Kernel = {}".format(kernel))
     print("C = {}".format(c))
     print("Gamma = {}".format(gamma))
-
-    modelSVM = svm.SVC(kernel = 'poly',C=c, gamma = gamma).fit(X_train, y_train)
+    
+    #Train the model
+    modelSVM = svm.SVC(kernel = 'poly',C=c, gamma = gamma).fit(X_train, y_train).  
     
     
     # Use cross-validation to make predictions on the test data
