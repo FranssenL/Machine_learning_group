@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[54]:
-
 
 import struct
 import numpy as np
@@ -17,8 +15,6 @@ import pandas as pd
 import itertools
 import math
 
-
-# In[47]:
 
 
 def read_data_svm(path):  #reads the data the same way as CNN but without reshaping
@@ -57,33 +53,39 @@ def plot_confusion(y_test, y_pred):
     plt.show()
     
 
-
-# In[56]:
-
-
 def main():
 #     os.chdir(os.path.dirname(sys.argv[0]))
-    
-    data = read_data("final.txt")
+    y_pred = None
+    y_test = None    
+
+    data = read_data_svm("final.txt")
     labels = gen_labels(len(data))
-    X_train, X_test,y_train, y_test = train_test_split(data,labels,
-                                   random_state=94, 
+    X_train, X_test,y_train, y_test = train_test_split(data,labels, 
                                    test_size=0.25, 
                                    shuffle=True)
     y_train = np.array(y_train)
     y_test = np.array(y_test)
+    
+    c = 5
+    gamma = 9.0
+    kernel = 'poly'
+    print("Kernel = {}".format(kernel))
+    print("C = {}".format(c))
+    print("Gamma = {}".format(gamma))
 
-    modelSVM = svm.SVC(kernel = 'poly',C=1, gamma = 0.5, degree=1).fit(X_train, y_train)
+    modelSVM = svm.SVC(kernel = 'poly',C=c, gamma = gamma).fit(X_train, y_train)
+    
     
     # Use cross-validation to make predictions on the test data
-    y_pred = cross_val_predict(modelSVM, X_test, y_test, cv=5)
+    y_pred = cross_val_predict(modelSVM, X_test, y_test, cv=10)
+
 
     # Compute and print the accuracy
     acc = metrics.accuracy_score(y_test, y_pred)
     print("Accuracy:", acc)
     
     plot_confusion(y_test, y_pred)
-    
+
     return
 
 if __name__ == "__main__":
